@@ -56,7 +56,7 @@ export async function filtrarPaisesPorRegionController(req, res) {
 
 export async function cargarPaisesController(req, res) {
     try {
-        const response = await fetch('https://restcountries.com/v3.1/all?fields=name,capital,population,region,flags');
+        const response = await fetch('https://restcountries.com/v3.1/region/americas');
         const data = await response.json();
 
         console.log('Tipo de data:', typeof data);

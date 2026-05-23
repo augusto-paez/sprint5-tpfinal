@@ -1,12 +1,17 @@
 import mongoose from 'mongoose';
 
 const paisSchema = new mongoose.Schema({
-    nombre: { type: String, required: true },
-    capital: { type: String },
-    poblacion: { type: Number },
+    name: { type: Object },
+    capital: [String],
+    borders: [String],
+    area: { type: Number },
+    population: { type: Number },
+    timezones: [String],
     region: { type: String },
-    bandera: { type: String }
-});
+    flags: { type: Object },
+    languages: { type: Object },
+    creador: { type: String }
+}, { strict: false });
 
 const Pais = mongoose.model('Pais', paisSchema, 'Grupo-10');
 export default Pais;
