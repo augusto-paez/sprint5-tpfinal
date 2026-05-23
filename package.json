@@ -1,0 +1,25 @@
+{
+  "name": "sprint5-tpfinal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.mjs",
+  "scripts": {
+    "start": "node src/app.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/augusto-paez/sprint5-tpfinal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/augusto-paez/sprint5-tpfinal/issues"
+  },
+  "homepage": "https://github.com/augusto-paez/sprint5-tpfinal#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.6.2"
+  }
+}
