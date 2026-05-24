@@ -19,3 +19,7 @@ export async function filtrarPaisesPorRegion(region) {
 export async function crearPais(data) {
     return await paisRepository.crear(data);
 }
+
+export async function eliminarPais(id) {
+    return await paisRepository.borrarPorId(id);
+}

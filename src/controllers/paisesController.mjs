@@ -3,7 +3,8 @@ import {
     obtenerPaisPorId,
     buscarPaisesPorNombre,
     filtrarPaisesPorRegion,
-    crearPais
+    crearPais,
+    eliminarPais
 } from '../services/paisesService.mjs';
 
 export async function obtenerTodosPaisesController(req, res) {
@@ -84,5 +85,50 @@ export async function cargarPaisesController(req, res) {
         res.status(201).json({ mensaje: `${paises.length} países hispanohablantes de América cargados correctamente` });
     } catch (error) {
         res.status(500).json({ mensaje: 'Error al cargar países', error: error.message });
+    }
+}
+
+export async function mostrarDashboardController(req, res) {
+    try {
+        const paises = await obtenerTodosPaises();
+        res.render('dashboard', { paises });
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al cargar el dashboard', error: error.message });
+    }
+}
+
+export async function eliminarPaisController(req, res) {
+    try {
+        const { id } = req.params;
+        await eliminarPais(id);
+        res.status(200).json({ mensaje: 'País eliminado correctamente' });
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al eliminar el país', error: error.message });
+    }
+}
+
+export async function mostrarFormularioAgregarController(req, res) {
+    res.render('addPais', { errores: [], datos: {} });
+}
+
+export async function agregarPaisController(req, res) {
+    try {
+        const { nombreOficial, capital, borders, area, population, timezones } = req.body;
+
+        const data = {
+            name: { official: nombreOficial, common: nombreOficial },
+            capital: [capital],
+            borders: borders ? borders.split(',').map(b => b.trim().toUpperCase()) : [],
+            area: Number(area),
+            population: Number(population),
+            timezones: [timezones],
+            region: 'Americas',
+            creador: 'Augusto'
+        };
+
+        await crearPais(data);
+        res.redirect('/');
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al agregar el país', error: error.message });
     }
 }

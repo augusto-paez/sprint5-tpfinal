@@ -1,0 +1,51 @@
+<h1>Países Hispanohablantes de América</h1>
+<br>
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Capital</th>
+            <th>Fronteras</th>
+            <th>Área (km²)</th>
+            <th>Población</th>
+            <th>Zona horaria</th>
+            <th>Creador</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% paises.forEach(pais => { %>
+        <tr>
+            <td><%= pais.name?.spa?.common || pais.name?.common || pais.name?.official %></td>
+            <td><%= pais.capital?.[0] || 'Sin capital' %></td>
+            <td><%= pais.borders?.join(', ') || 'Sin fronteras' %></td>
+            <td><%= pais.area?.toLocaleString() %></td>
+            <td><%= pais.population?.toLocaleString() %></td>
+            <td><%= pais.timezones?.[0] %></td>
+            <td><%= pais.creador %></td>
+            <td>
+                <a href="/paises/<%= pais._id %>/editar">Editar</a>
+                &nbsp;
+                <button onclick="eliminar('<%= pais._id %>')">Eliminar</button>
+            </td>
+        </tr>
+        <% }) %>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3"><strong>Totales</strong></td>
+            <td><strong><%= paises.reduce((acc, p) => acc + (p.area || 0), 0).toLocaleString() %></strong></td>
+            <td><strong><%= paises.reduce((acc, p) => acc + (p.population || 0), 0).toLocaleString() %></strong></td>
+            <td colspan="3"></td>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+    function eliminar(id) {
+        if (confirm('¿Estás seguro de que deseas eliminar este país?')) {
+            fetch(`/paises/${id}`, { method: 'DELETE' })
+                .then(() => window.location.reload());
+        }
+    }
+</script>

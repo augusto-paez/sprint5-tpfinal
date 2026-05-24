@@ -22,6 +22,9 @@ class PaisRepository extends IRepository {
         const pais = new Pais(data);
         return await pais.save();
     }
-}
 
+    async borrarPorId(id) {
+        return await Pais.findByIdAndDelete(id);
+    }
+}
 export default new PaisRepository();

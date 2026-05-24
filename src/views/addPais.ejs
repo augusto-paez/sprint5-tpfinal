@@ -1,0 +1,33 @@
+<h1>Agregar País</h1>
+<br>
+
+<% if (typeof errores !== 'undefined' && errores.length > 0) { %>
+    <div style="color:red; margin-bottom:16px;">
+        <ul>
+            <% errores.forEach(e => { %><li><%= e.msg %></li><% }) %>
+        </ul>
+    </div>
+<% } %>
+
+<form action="/paises/agregar" method="POST">
+    <label>Nombre oficial *</label><br>
+    <input type="text" name="nombreOficial" value="<%= typeof datos !== 'undefined' ? datos.nombreOficial : '' %>" minlength="3" maxlength="90" required><br><br>
+
+    <label>Capital *</label><br>
+    <input type="text" name="capital" value="<%= typeof datos !== 'undefined' ? datos.capital : '' %>" required><br><br>
+
+    <label>Fronteras (códigos de 3 letras separados por coma)</label><br>
+    <input type="text" name="borders" value="<%= typeof datos !== 'undefined' ? datos.borders : '' %>"><br><br>
+
+    <label>Área (km²) *</label><br>
+    <input type="number" name="area" value="<%= typeof datos !== 'undefined' ? datos.area : '' %>" min="0" required><br><br>
+
+    <label>Población *</label><br>
+    <input type="number" name="population" value="<%= typeof datos !== 'undefined' ? datos.population : '' %>" min="0" required><br><br>
+
+    <label>Zona horaria *</label><br>
+    <input type="text" name="timezones" value="<%= typeof datos !== 'undefined' ? datos.timezones : '' %>" required><br><br>
+
+    <button type="submit">Guardar</button>
+    <a href="/">Cancelar</a>
+</form>
