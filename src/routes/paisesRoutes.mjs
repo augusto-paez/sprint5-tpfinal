@@ -10,7 +10,8 @@ import {
     mostrarFormularioAgregarController,
     agregarPaisController,
     mostrarFormularioEditarController,
-    editarPaisController
+    editarPaisController,
+    mostrarAcercaController
 } from '../controllers/paisesController.mjs';
 import { paisValidationRules } from '../middlewares/validationRules.mjs';
 import { handleValidationErrors } from '../middlewares/errorMiddleware.mjs';
@@ -23,6 +24,7 @@ router.get('/paises/agregar', mostrarFormularioAgregarController);
 router.post('/paises/agregar', paisValidationRules(), handleValidationErrors, agregarPaisController);
 router.get('/paises/:id/editar', mostrarFormularioEditarController);
 router.post('/paises/:id/editar', paisValidationRules(), handleValidationErrors, editarPaisController);
+router.get('/acerca', mostrarAcercaController);
 
 // API JSON
 router.post('/paises/cargar', cargarPaisesController);

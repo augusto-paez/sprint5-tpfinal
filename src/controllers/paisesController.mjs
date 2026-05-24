@@ -167,3 +167,7 @@ export async function editarPaisController(req, res) {
         res.status(500).json({ mensaje: 'Error al editar el país', error: error.message });
     }
 }
+
+export function mostrarAcercaController(req, res) {
+    res.render('acerca');
+}
