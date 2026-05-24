@@ -114,7 +114,7 @@ export async function mostrarFormularioAgregarController(req, res) {
 
 export async function agregarPaisController(req, res) {
     try {
-        const { nombreOficial, capital, borders, area, population, timezones } = req.body;
+        const { nombreOficial, capital, borders, area, population, timezones, creador } = req.body;
 
         const data = {
             name: { official: nombreOficial, common: nombreOficial },
@@ -124,7 +124,7 @@ export async function agregarPaisController(req, res) {
             population: Number(population),
             timezones: [timezones],
             region: 'Americas',
-            creador: 'Augusto'
+            creador: creador
         };
 
         await crearPais(data);
@@ -150,7 +150,7 @@ export async function mostrarFormularioEditarController(req, res) {
 export async function editarPaisController(req, res) {
     try {
         const { id } = req.params;
-        const { nombreOficial, capital, borders, area, population, timezones } = req.body;
+        const { nombreOficial, capital, borders, area, population, timezones, creador } = req.body;
 
         const data = {
             name: { official: nombreOficial, common: nombreOficial },
@@ -159,6 +159,7 @@ export async function editarPaisController(req, res) {
             area: Number(area),
             population: Number(population),
             timezones: [timezones],
+            creador: creador
         };
 
         await actualizarPais(id, data);
