@@ -5,7 +5,9 @@ import {
     filtrarPaisesPorRegion,
     crearPais,
     eliminarPais,
-    actualizarPais
+    actualizarPais,
+    cargarPaisesDesdeAPI,
+    transformarDatosPais
 } from '../services/paisesService.mjs';
 
 export async function obtenerTodosPaisesController(req, res) {
@@ -58,32 +60,8 @@ export async function filtrarPaisesPorRegionController(req, res) {
 
 export async function cargarPaisesController(req, res) {
     try {
-        const response = await fetch('https://restcountries.com/v3.1/region/americas');
-        const data = await response.json();
-
-        if (!Array.isArray(data)) {
-            return res.status(500).json({ mensaje: 'Error al obtener datos de RestCountries', data });
-        }
-
-        // Filtrar solo países con español
-        const paisesEspanol = data.filter(p =>
-            p.languages && p.languages.spa
-        );
-
-        // Eliminar propiedades no deseadas y agregar creador
-        const paises = paisesEspanol.map(p => {
-            const { translations, tld, cca2, ccn3, cca3, cioc, idd, altSpellings, car, coatOfArms, postalCode, demonyms, ...resto } = p;
-            return {
-                ...resto,
-                creador: 'Augusto'
-            };
-        });
-
-        for (const pais of paises) {
-            await crearPais(pais);
-        }
-
-        res.status(201).json({ mensaje: `${paises.length} países hispanohablantes de América cargados correctamente` });
+        const cantidad = await cargarPaisesDesdeAPI();
+        res.status(201).json({ mensaje: `${cantidad} países hispanohablantes de América cargados correctamente` });
     } catch (error) {
         res.status(500).json({ mensaje: 'Error al cargar países', error: error.message });
     }
@@ -114,19 +92,7 @@ export async function mostrarFormularioAgregarController(req, res) {
 
 export async function agregarPaisController(req, res) {
     try {
-        const { nombreOficial, capital, borders, area, population, timezones, creador } = req.body;
-
-        const data = {
-            name: { official: nombreOficial, common: nombreOficial },
-            capital: [capital],
-            borders: borders ? borders.split(',').map(b => b.trim().toUpperCase()) : [],
-            area: Number(area),
-            population: Number(population),
-            timezones: [timezones],
-            region: 'Americas',
-            creador: creador
-        };
-
+        const data = await transformarDatosPais(req.body);
         await crearPais(data);
         res.redirect('/');
     } catch (error) {
@@ -150,18 +116,7 @@ export async function mostrarFormularioEditarController(req, res) {
 export async function editarPaisController(req, res) {
     try {
         const { id } = req.params;
-        const { nombreOficial, capital, borders, area, population, timezones, creador } = req.body;
-
-        const data = {
-            name: { official: nombreOficial, common: nombreOficial },
-            capital: [capital],
-            borders: borders ? borders.split(',').map(b => b.trim().toUpperCase()) : [],
-            area: Number(area),
-            population: Number(population),
-            timezones: [timezones],
-            creador: creador
-        };
-
+        const data = await transformarDatosPais(req.body);
         await actualizarPais(id, data);
         res.redirect('/');
     } catch (error) {
