@@ -3,19 +3,19 @@ import IRepository from './IRepository.mjs';
 
 class PaisRepository extends IRepository {
     async obtenerTodos() {
-        return await Pais.find({});
+        return await Pais.find({ name: { $exists: true } });
     }
 
     async obtenerPorId(id) {
-        return await Pais.findById(id);
+        return await Pais.findOne({ _id: id, name: { $exists: true } });
     }
 
     async buscarPorNombre(nombre) {
-        return await Pais.find({ nombre: new RegExp(nombre, 'i') });
+        return await Pais.find({ name: { $exists: true }, 'name.common': new RegExp(nombre, 'i') });
     }
 
     async filtrarPorRegion(region) {
-        return await Pais.find({ region: new RegExp(region, 'i') });
+        return await Pais.find({ name: { $exists: true }, region: new RegExp(region, 'i') });
     }
 
     async crear(data) {
@@ -23,12 +23,12 @@ class PaisRepository extends IRepository {
         return await pais.save();
     }
 
-    async borrarPorId(id) {
-        return await Pais.findByIdAndDelete(id);
-    }
-
     async actualizar(id, data) {
         return await Pais.findByIdAndUpdate(id, data, { new: true });
+    }
+
+    async borrarPorId(id) {
+        return await Pais.findByIdAndDelete(id);
     }
 }
 export default new PaisRepository();
