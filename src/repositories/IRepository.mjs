@@ -5,12 +5,6 @@ class IRepository {
     obtenerTodos() {
         throw new Error("Método 'obtenerTodos()' no implementado");
     }
-    buscarPorAtributo(atributo, valor) {
-        throw new Error("Método 'buscarPorAtributo()' no implementado");
-    }
-    obtenerMayoresDe30() {
-        throw new Error("Método 'obtenerMayoresDe30()' no implementado");
-    }
     crear(data) {
         throw new Error("Método 'crear()' no implementado");
     }
@@ -19,9 +13,6 @@ class IRepository {
     }
     borrarPorId(id) {
         throw new Error("Método 'borrarPorId()' no implementado");
-    }
-    borrarPorNombre(nombre) {
-        throw new Error("Método 'borrarPorNombre()' no implementado");
     }
 }
 
