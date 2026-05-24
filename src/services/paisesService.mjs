@@ -23,3 +23,7 @@ export async function crearPais(data) {
 export async function eliminarPais(id) {
     return await paisRepository.borrarPorId(id);
 }
+
+export async function actualizarPais(id, data) {
+    return await paisRepository.actualizar(id, data);
+}

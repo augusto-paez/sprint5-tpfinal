@@ -4,7 +4,8 @@ import {
     buscarPaisesPorNombre,
     filtrarPaisesPorRegion,
     crearPais,
-    eliminarPais
+    eliminarPais,
+    actualizarPais
 } from '../services/paisesService.mjs';
 
 export async function obtenerTodosPaisesController(req, res) {
@@ -130,5 +131,39 @@ export async function agregarPaisController(req, res) {
         res.redirect('/');
     } catch (error) {
         res.status(500).json({ mensaje: 'Error al agregar el país', error: error.message });
+    }
+}
+
+export async function mostrarFormularioEditarController(req, res) {
+    try {
+        const { id } = req.params;
+        const pais = await obtenerPaisPorId(id);
+        if (!pais) {
+            return res.status(404).json({ mensaje: 'País no encontrado' });
+        }
+        res.render('editPais', { pais, errores: [] });
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al obtener el país', error: error.message });
+    }
+}
+
+export async function editarPaisController(req, res) {
+    try {
+        const { id } = req.params;
+        const { nombreOficial, capital, borders, area, population, timezones } = req.body;
+
+        const data = {
+            name: { official: nombreOficial, common: nombreOficial },
+            capital: [capital],
+            borders: borders ? borders.split(',').map(b => b.trim().toUpperCase()) : [],
+            area: Number(area),
+            population: Number(population),
+            timezones: [timezones],
+        };
+
+        await actualizarPais(id, data);
+        res.redirect('/');
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al editar el país', error: error.message });
     }
 }

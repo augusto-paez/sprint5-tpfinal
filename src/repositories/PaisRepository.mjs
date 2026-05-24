@@ -26,5 +26,9 @@ class PaisRepository extends IRepository {
     async borrarPorId(id) {
         return await Pais.findByIdAndDelete(id);
     }
+
+    async actualizar(id, data) {
+        return await Pais.findByIdAndUpdate(id, data, { new: true });
+    }
 }
 export default new PaisRepository();

@@ -8,15 +8,21 @@ import {
     mostrarDashboardController,
     eliminarPaisController,
     mostrarFormularioAgregarController,
-    agregarPaisController
+    agregarPaisController,
+    mostrarFormularioEditarController,
+    editarPaisController
 } from '../controllers/paisesController.mjs';
+import { paisValidationRules } from '../middlewares/validationRules.mjs';
+import { handleValidationErrors } from '../middlewares/errorMiddleware.mjs';
 
 const router = express.Router();
 
 // Vistas EJS
 router.get('/', mostrarDashboardController);
 router.get('/paises/agregar', mostrarFormularioAgregarController);
-router.post('/paises/agregar', agregarPaisController);
+router.post('/paises/agregar', paisValidationRules(), handleValidationErrors, agregarPaisController);
+router.get('/paises/:id/editar', mostrarFormularioEditarController);
+router.post('/paises/:id/editar', paisValidationRules(), handleValidationErrors, editarPaisController);
 
 // API JSON
 router.post('/paises/cargar', cargarPaisesController);
