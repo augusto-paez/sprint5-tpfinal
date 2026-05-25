@@ -12,6 +12,7 @@ Aplicación web desarrollada con Node.js, Express, MongoDB y EJS que consume la 
 - Implementar un dashboard web con operaciones CRUD completas.
 - Aplicar validaciones robustas en backend.
 - Seguir una arquitectura MVC con capas (Controller → Service → Repository → Model).
+- Evitar duplicados mediante upsert por nombre oficial.
 
 ---
 
@@ -50,7 +51,9 @@ node app.mjs
 ### 4. Cargar los países desde la API
 
 Una vez que el servidor esté corriendo, ejecutar este endpoint desde Postman:
+
 POST http://localhost:3000/paises/cargar
+
 Esto carga los países hispanohablantes de América en la base de datos. Solo es necesario hacerlo una vez.
 
 ### 5. Abrir la aplicación
@@ -70,7 +73,7 @@ http://localhost:3000
 | GET | `/paises/:id` | Detalle por ID (JSON) |
 | POST | `/paises/cargar` | Cargar países desde RestCountries |
 | POST | `/paises/agregar` | Agregar país nuevo |
-| PUT | `/paises/:id` | Actualizar país |
+| POST | `/paises/:id/editar` | Actualizar país |
 | DELETE | `/paises/:id` | Eliminar país |
 
 ---

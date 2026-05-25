@@ -32,7 +32,14 @@ class PaisRepository extends IRepository {
     }
 
     async insertarMuchos(datos) {
-        return await Pais.insertMany(datos);
+        const operaciones = datos.map(pais => ({
+            updateOne: {
+                filter: { 'name.official': pais.name.official },
+                update: { $set: pais },
+                upsert: true
+            }
+        }));
+        return await Pais.bulkWrite(operaciones);
     }
 }
 export default new PaisRepository();

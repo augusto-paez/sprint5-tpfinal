@@ -48,8 +48,9 @@ export async function cargarPaisesDesdeAPI() {
 }
 
 export async function transformarDatosPais(body) {
-    const { nombreOficial, capital, borders, area, population, timezones, creador } = body;
-    return {
+    const { nombreOficial, capital, borders, area, population, timezones, creador, gini } = body;
+    
+    const data = {
         name: { official: nombreOficial, common: nombreOficial },
         capital: [capital],
         borders: borders ? borders.split(',').map(b => b.trim().toUpperCase()) : [],
@@ -59,4 +60,11 @@ export async function transformarDatosPais(body) {
         region: 'Americas',
         creador
     };
+
+    if (gini) {
+        const anio = new Date().getFullYear();
+        data.gini = { [anio]: Number(gini) };
+    }
+
+    return data;
 }

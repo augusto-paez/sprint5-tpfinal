@@ -37,4 +37,8 @@ export const paisValidationRules = () => [
     body('timezones')
         .trim()
         .notEmpty().withMessage('La zona horaria es requerida'),
+
+    body('gini')
+    .optional()
+    .isFloat({ min: 0, max: 100 }).withMessage('El índice Gini debe ser un número entre 0 y 100'),
 ];

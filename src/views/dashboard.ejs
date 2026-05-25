@@ -1,5 +1,14 @@
 <h1>Países Hispanohablantes de América</h1>
 <br>
+
+<input 
+    type="text" 
+    id="filtro" 
+    placeholder="Buscar por nombre o capital..." 
+    oninput="filtrarTabla()"
+    style="padding: 8px; width: 300px; margin-bottom: 16px;"
+>
+
 <table border="1" cellpadding="8" cellspacing="0" width="100%">
     <thead>
         <tr>
@@ -9,11 +18,12 @@
             <th>Área (km²)</th>
             <th>Población</th>
             <th>Zona horaria</th>
+            <th>Gini</th>
             <th>Creador</th>
             <th>Acciones</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tablaPaises">
         <% paises.forEach(pais => { %>
         <tr>
             <td><%= pais.name?.spa?.common || pais.name?.common || pais.name?.official %></td>
@@ -22,6 +32,17 @@
             <td><%= pais.area?.toLocaleString() %></td>
             <td><%= pais.population?.toLocaleString() %></td>
             <td><%= pais.timezones?.[0] %></td>
+            <td>
+                <% 
+                    const giniObj = pais.gini;
+                    let giniValor = 'N/A';
+                    if (giniObj && typeof giniObj === 'object') {
+                        const anios = Object.keys(giniObj).sort().reverse();
+                        if (anios.length > 0) giniValor = giniObj[anios[0]];
+                    }
+                %>
+                <%= giniValor %>
+            </td>
             <td><%= pais.creador %></td>
             <td>
                 <a href="/paises/<%= pais._id %>/editar">Editar</a>
@@ -36,12 +57,40 @@
             <td colspan="3"><strong>Totales</strong></td>
             <td><strong><%= paises.reduce((acc, p) => acc + (p.area || 0), 0).toLocaleString() %></strong></td>
             <td><strong><%= paises.reduce((acc, p) => acc + (p.population || 0), 0).toLocaleString() %></strong></td>
-            <td colspan="3"></td>
+            <td></td>
+            <td>
+                <% 
+                    const paisesConGini = paises.filter(p => {
+                        if (!p.gini || typeof p.gini !== 'object') return false;
+                        return Object.keys(p.gini).length > 0;
+                    });
+                    const sumaGini = paisesConGini.reduce((acc, p) => {
+                        const anios = Object.keys(p.gini).sort().reverse();
+                        return acc + p.gini[anios[0]];
+                    }, 0);
+                    const promedioGini = paisesConGini.length > 0 
+                        ? (sumaGini / paisesConGini.length).toFixed(2) 
+                        : 'N/A';
+                %>
+                <strong>Prom: <%= promedioGini %></strong><br>
+                <small>(<%= paisesConGini.length %> países)</small>
+            </td>
+            <td colspan="2"></td>
         </tr>
     </tfoot>
 </table>
 
 <script>
+    function filtrarTabla() {
+        const filtro = document.getElementById('filtro').value.toLowerCase();
+        const filas = document.querySelectorAll('#tablaPaises tr');
+        filas.forEach(fila => {
+            const nombre = fila.cells[0]?.textContent.toLowerCase() || '';
+            const capital = fila.cells[1]?.textContent.toLowerCase() || '';
+            fila.style.display = nombre.includes(filtro) || capital.includes(filtro) ? '' : 'none';
+        });
+    }
+
     function eliminar(id) {
         if (confirm('¿Estás seguro de que deseas eliminar este país?')) {
             fetch(`/paises/${id}`, { method: 'DELETE' })

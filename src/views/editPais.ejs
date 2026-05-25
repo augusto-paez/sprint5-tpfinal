@@ -30,6 +30,9 @@
 
     <label>Creador *</label><br>
     <input type="text" name="creador" value="<%= pais.creador || '' %>" required><br><br>
+    
+    <label>Gini (0-100, opcional)</label><br>
+    <input type="number" name="gini" value="<%= pais.gini ? Object.values(pais.gini)[0] : '' %>" min="0" max="100" step="0.1"><br><br>
 
     <button type="submit">Guardar</button>
     <a href="/">Cancelar</a>
